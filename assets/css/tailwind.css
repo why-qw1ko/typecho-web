@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4 主题配置 */
+@theme {
+  /* 主色调 - 现代科技蓝 */
+  --color-primary-50: oklch(0.97 0.02 250);
+  --color-primary-100: oklch(0.94 0.04 250);
+  --color-primary-200: oklch(0.88 0.08 250);
+  --color-primary-300: oklch(0.80 0.12 250);
+  --color-primary-400: oklch(0.70 0.16 250);
+  --color-primary-500: oklch(0.60 0.20 250);
+  --color-primary-600: oklch(0.50 0.20 250);
+  --color-primary-700: oklch(0.42 0.18 250);
+  --color-primary-800: oklch(0.35 0.15 250);
+  --color-primary-900: oklch(0.28 0.12 250);
+  --color-primary-950: oklch(0.18 0.08 250);
+
+  /* 强调色 - 活力橙 */
+  --color-accent-50: oklch(0.98 0.02 40);
+  --color-accent-100: oklch(0.95 0.05 40);
+  --color-accent-200: oklch(0.90 0.10 40);
+  --color-accent-300: oklch(0.82 0.15 40);
+  --color-accent-400: oklch(0.72 0.20 40);
+  --color-accent-500: oklch(0.65 0.22 40);
+  --color-accent-600: oklch(0.55 0.20 40);
+  --color-accent-700: oklch(0.48 0.18 40);
+  --color-accent-800: oklch(0.40 0.15 40);
+  --color-accent-900: oklch(0.32 0.12 40);
+
+  /* 背景色 */
+  --color-surface-50: oklch(0.98 0.01 250);
+  --color-surface-100: oklch(0.96 0.01 250);
+  --color-surface-200: oklch(0.92 0.01 250);
+  --color-surface-800: oklch(0.20 0.02 250);
+  --color-surface-900: oklch(0.15 0.02 250);
+  --color-surface-950: oklch(0.10 0.02 250);
+
+  /* 字体 */
+  --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Cal Sans', 'Inter', var(--font-sans);
+
+  /* 圆角 */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* 阴影 */
+  --shadow-soft: 0 4px 20px -4px rgb(0 0 0 / 0.08);
+  --shadow-medium: 0 8px 30px -8px rgb(0 0 0 / 0.12);
+  --shadow-glow: 0 0 40px rgb(59 130 246 / 0.15);
+
+  /* 动画时长 */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* 全局样式 */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply antialiased text-slate-900 bg-surface-50;
+  @apply dark:text-slate-100 dark:bg-surface-950;
+}
+
+/* 选中文本样式 */
+::selection {
+  @apply bg-primary-500/20 text-primary-900;
+  @apply dark:bg-primary-400/30 dark:text-primary-100;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
+
+/* 页面过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* 渐变背景 */
+.gradient-bg {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-accent-500) 100%);
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-accent-500) 100%);
+}
+
+/* 玻璃态效果 */
+.glass {
+  @apply backdrop-blur-xl bg-white/70 dark:bg-slate-900/70;
+  @apply border border-white/20 dark:border-slate-700/30;
+}
+
+/* 发光效果 */
+.glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* 文章内容样式 */
+.prose-content {
+  @apply prose prose-slate dark:prose-invert max-w-none;
+  @apply prose-headings:font-display prose-headings:tracking-tight;
+  @apply prose-a:text-primary-500 prose-a:no-underline hover:prose-a:text-primary-600;
+  @apply prose-code:text-primary-600 prose-code:bg-primary-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded dark:prose-code:bg-primary-900/30;
+  @apply prose-pre:bg-slate-900 prose-pre:border prose-pre:border-slate-800;
+  @apply prose-img:rounded-xl prose-img:shadow-lg;
+}
+
+/* 响应式隐藏 */
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none;
+  }
+}
