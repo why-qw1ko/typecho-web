@@ -45,7 +45,7 @@ npm run preview
 ```ts
 runtimeConfig: {
   public: {
-    apiBase: 'http://your-api-server:8080/api',
+    apiBase: 'http://your-api-server:8088/api',
   },
 }
 ```

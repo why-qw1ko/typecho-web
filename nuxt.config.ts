@@ -62,7 +62,7 @@ export default defineNuxtConfig({
   // 运行时配置
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8080/api',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:8088/api',
     },
   },
 
@@ -73,7 +73,7 @@ export default defineNuxtConfig({
       { code: 'en-US', name: 'English', file: 'en-US.json' },
     ],
     defaultLocale: 'zh-CN',
-    lazy: true,
+    // lazy: true, 没有这个属性
     langDir: 'locales',
   },
 
