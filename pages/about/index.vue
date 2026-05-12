@@ -1,7 +1,9 @@
 <script setup lang="ts">
-useSeoMeta({
+useHead({
   title: '关于 - Typecho Blog',
-  description: '了解更多关于这个博客的信息',
+  meta: [
+    { name: 'description', content: '了解更多关于这个博客的信息' }
+  ]
 })
 
 const skills = [
@@ -21,24 +23,31 @@ const timeline = [
 
 <template>
   <div>
-    <CommonHeroSection
-      title="关于我"
-      description="一个热爱技术的开发者，记录学习和成长的点滴"
-    />
+    <!-- Introduction -->
+    <section class="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold mb-4">
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+            关于我
+          </span>
+        </h1>
+        <p class="text-lg text-slate-600">一个热爱技术的开发者，记录学习和成长的点滴</p>
+      </div>
+    </section>
 
     <div class="container mx-auto px-4 py-12">
       <div class="max-w-4xl mx-auto">
         <!-- Introduction -->
         <section class="mb-16">
-          <h2 class="text-2xl font-display font-bold mb-6">
-            <span class="gradient-text">个人简介</span>
+          <h2 class="text-2xl font-bold mb-6 text-blue-600">
+            个人简介
           </h2>
-          <div class="prose-content">
-            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+          <div class="text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p>
               你好！我是一个热爱技术的开发者，喜欢探索新技术，并将其应用到实际项目中。
               这个博客是我记录学习过程和技术分享的地方。
             </p>
-            <p class="text-slate-600 dark:text-slate-400 leading-relaxed mt-4">
+            <p class="mt-4">
               主要关注前端开发和后端架构，对 Vue.js、Nuxt、Spring Boot 等技术有深入研究。
               同时也喜欢阅读、写作和摄影。
             </p>
@@ -47,8 +56,8 @@ const timeline = [
 
         <!-- Skills -->
         <section class="mb-16">
-          <h2 class="text-2xl font-display font-bold mb-6">
-            <span class="gradient-text">技能掌握</span>
+          <h2 class="text-2xl font-bold mb-6 text-blue-600">
+            技能掌握
           </h2>
           <div class="space-y-4">
             <div v-for="skill in skills" :key="skill.name">
@@ -58,7 +67,7 @@ const timeline = [
               </div>
               <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  class="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-1000"
+                  class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
                   :style="{ width: `${skill.level}%` }"
                 />
               </div>
@@ -68,8 +77,8 @@ const timeline = [
 
         <!-- Timeline -->
         <section>
-          <h2 class="text-2xl font-display font-bold mb-6">
-            <span class="gradient-text">成长历程</span>
+          <h2 class="text-2xl font-bold mb-6 text-blue-600">
+            成长历程
           </h2>
           <div class="relative">
             <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700" />
@@ -79,9 +88,9 @@ const timeline = [
                 :key="index"
                 class="relative pl-12"
               >
-                <div class="absolute left-2 w-5 h-5 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full" />
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-soft">
-                  <span class="text-sm text-primary-500 font-medium">{{ item.year }}</span>
+                <div class="absolute left-2 w-5 h-5 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full" />
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-md">
+                  <span class="text-sm text-blue-500 font-medium">{{ item.year }}</span>
                   <h3 class="font-semibold mt-1">{{ item.title }}</h3>
                   <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">{{ item.desc }}</p>
                 </div>
