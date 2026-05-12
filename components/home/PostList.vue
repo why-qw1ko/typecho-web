@@ -2,7 +2,7 @@
 import { gsap } from 'gsap'
 import type { PostWrapper } from '~/types'
 
-const { data: postsData, pending } = await usePosts({
+const { data: postsData } = await usePosts({
   pageNum: 1,
   pageSize: 10,
   type: 'post',
@@ -49,12 +49,12 @@ onMounted(() => {
     </div>
 
     <!-- Loading -->
-    <div v-if="pending" class="flex justify-center py-12">
+    <!-- <div v-if="pending" class="flex justify-center py-12">
       <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
-    </div>
+    </div> -->
 
     <!-- Posts Grid -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <PostCard
         v-for="(post, index) in posts"
         :key="post.cid"

@@ -7,11 +7,30 @@ const router = useRouter()
 const searchQuery = ref((route.query.q as string) || '')
 const query = computed(() => route.query.q as string || '')
 
-const { data: postsData, pending } = await usePosts({
-  pageNum: 1,
-  pageSize: 20,
-  keyword: query.value,
-})
+const postsData = ref<any>(null)
+const pending = ref(false)
+
+const fetchPosts = async () => {
+  if (!query.value) {
+    postsData.value = null
+    return
+  }
+  pending.value = true
+  try {
+    const result = await usePosts({
+      pageNum: 1,
+      pageSize: 20,
+      keyword: query.value,
+    })
+    postsData.value = result.data.value
+  } finally {
+    pending.value = false
+  }
+}
+
+watch(query, () => {
+  fetchPosts()
+}, { immediate: true })
 
 const posts = computed(() => {
   const list = postsData.value?.list || []
@@ -95,7 +114,7 @@ useHead({
       </div>
 
       <!-- Empty Search -->
-      <div v-else-if="query && !posts.length" class="text-center py-12">
+      <div v-else-if="query && !posts.length && !pending" class="text-center py-12">
         <p class="text-slate-500 dark:text-slate-400">未找到相关文章</p>
         <NuxtLink to="/search" class="text-blue-500 hover:underline mt-4 inline-block">
           重新搜索
@@ -103,7 +122,7 @@ useHead({
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12">
+      <div v-else-if="!query" class="text-center py-12">
         <p class="text-slate-500 dark:text-slate-400">输入关键词开始搜索</p>
       </div>
     </div>

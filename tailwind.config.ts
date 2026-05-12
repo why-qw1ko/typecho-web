@@ -68,6 +68,9 @@ export default {
         normal: '300ms',
         slow: '500ms',
       },
+      backgroundImage: {
+        'gradient-text': 'linear-gradient(135deg, #3b82f6 0%, #d946ef 100%)',
+      },
     },
   },
   plugins: [
