@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
+import type { PostWrapper } from '~/types'
 
-// 加载精选文章
 const { data: postsData } = await usePosts({
   pageNum: 1,
   pageSize: 3,
@@ -9,7 +9,19 @@ const { data: postsData } = await usePosts({
   status: 'publish',
 })
 
-const featuredPosts = computed(() => postsData.value?.list?.slice(0, 3) || [])
+const featuredPosts = computed(() => {
+  const list = postsData.value?.list || []
+  return list.slice(0, 3).map((item: PostWrapper) => ({
+    cid: item.content?.cid,
+    title: item.content?.title || '',
+    text: item.content?.text || '',
+    created: item.content?.created || 0,
+    category: item.category,
+    tags: item.tags,
+    views: item.content?.views || 0,
+    commentsNum: item.content?.commentsNum || 0,
+  }))
+})
 
 onMounted(() => {
   gsap.from('.featured-post', {

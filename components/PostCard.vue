@@ -8,8 +8,11 @@ const props = defineProps<{
 }>()
 
 // 格式化日期
-const formatDate = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleDateString('zh-CN', {
+const formatDate = (timestamp?: number) => {
+  if (!timestamp) return ''
+  const date = new Date(timestamp * 1000)
+  if (isNaN(date.getTime())) return ''
+  return date.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -18,7 +21,7 @@ const formatDate = (timestamp: number) => {
 
 // 截取摘要
 const excerpt = computed(() => {
-  const text = props.post.text?.replace(/<[^>]*>/g, '') || ''
+  const text = props.post.text?.replace(/<[^>]*>/g, '').replace(/<!--markdown-->/g, '') || ''
   return text.length > 150 ? text.slice(0, 150) + '...' : text
 })
 

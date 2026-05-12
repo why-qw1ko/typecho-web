@@ -1,5 +1,12 @@
 import type { UseFetchOptions } from '#app'
 
+// API 响应类型
+interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
 // API 基础地址
 const getApiBase = () => {
   const config = useRuntimeConfig()
@@ -14,14 +21,21 @@ export const useApi = <T>(
   const apiBase = getApiBase()
   const token = useCookie('token')
 
-  return useFetch<T>(`${apiBase}${url}`, {
+  return useFetch<ApiResponse<T>>(`${apiBase}${url}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
       ...options.headers,
     },
-    // 错误处理
+    transform: (response: ApiResponse<T>) => {
+      if (response.code !== 200) {
+        const error = new Error(response.message || 'API Error')
+        ;(error as any).code = response.code
+        throw error
+      }
+      return response.data
+    },
     onResponseError({ response }) {
       if (response.status === 401) {
         token.value = null
@@ -43,7 +57,7 @@ export const useApiGet = <T>(url: string, params?: Record<string, unknown>) => {
 export const useApiPost = <T>(url: string, body?: unknown) => {
   return useApi<T>(url, {
     method: 'POST',
-  body,
+    body,
   })
 }
 

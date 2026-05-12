@@ -1,12 +1,22 @@
 <script setup lang="ts">
+import type { PostWrapper } from '~/types'
+
 const route = useRoute()
 const query = computed(() => route.query.q as string || '')
 
-// 搜索文章
 const { data: postsData, pending } = await usePosts({
   pageNum: 1,
   pageSize: 20,
   keyword: query.value,
+})
+
+const posts = computed(() => {
+  const list = postsData.value?.list || []
+  return list.map((item: PostWrapper) => ({
+    cid: item.content?.cid,
+    title: item.content?.title || '',
+    text: item.content?.text || '',
+  }))
 })
 
 useHead({
@@ -35,9 +45,9 @@ useHead({
       </div>
 
       <!-- Results -->
-      <div v-else-if="postsData?.list?.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="posts.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
-          v-for="post in postsData.list"
+          v-for="post in posts"
           :key="post.cid"
           class="p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-md"
         >

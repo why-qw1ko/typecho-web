@@ -16,18 +16,22 @@ export const useUserStore = defineStore('user', () => {
   // 登录
   const login = async (username: string, password: string) => {
     const apiBase = useRuntimeConfig().public.apiBase
-    const { data, error } = await useFetch<{ token: string; tokenType: string }>(`${apiBase}/auth/login`, {
+    const { data, error } = await useFetch<{ code: number; message: string; data: { token: string; tokenType: string } }>(`${apiBase}/auth/login`, {
       method: 'POST',
       body: { username, password },
     })
 
     if (error.value) {
-      throw new Error(error.value.message || '登录失败')
+      throw new Error((error.value as any)?.message || '登录失败')
     }
 
-    if (data.value) {
-      token.value = data.value.token
+    if (data.value && data.value.code === 200) {
+      token.value = data.value.data.token
       await fetchUserInfo()
+    } else if (data.value && data.value.message) {
+      throw new Error(data.value.message)
+    } else {
+      throw new Error('登录失败')
     }
   }
 
@@ -36,14 +40,14 @@ export const useUserStore = defineStore('user', () => {
     if (!token.value) return
 
     const apiBase = useRuntimeConfig().public.apiBase
-    const { data, error } = await useFetch<User>(`${apiBase}/auth/me`, {
+    const { data, error } = await useFetch<{ code: number; message: string; data: User }>(`${apiBase}/auth/me`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     })
 
-    if (!error.value && data.value) {
-      user.value = data.value
+    if (!error.value && data.value && data.value.code === 200) {
+      user.value = data.value.data
     }
   }
 

@@ -10,13 +10,29 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxt/image',
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
   ],
 
   site: {
     url: 'https://your-domain.com',
     name: 'Typecho Blog',
     description: '一个现代化的博客系统',
+  },
+
+  i18n: {
+    locales: [
+      { code: 'zh-CN', name: '简体中文', file: 'zh-CN.json' },
+      { code: 'en-US', name: 'English', file: 'en-US.json' },
+    ],
     defaultLocale: 'zh-CN',
+    lazy: true,
+    langDir: 'locales',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_locale',
+      redirectOn: 'root',
+    },
   },
 
   image: {

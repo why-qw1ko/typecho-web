@@ -1,8 +1,26 @@
 <script setup lang="ts">
+import type { PostWrapper } from '~/types'
+
 const route = useRoute()
 const cid = computed(() => route.params.id as string)
 
-const { data: post, pending, error } = await usePost(cid.value)
+const { data: postWrapper, pending, error } = await usePost(cid.value)
+const { render } = useMarkdown()
+
+const post = computed(() => {
+  if (!postWrapper.value) return null
+  return {
+    title: postWrapper.value.content?.title || '',
+    text: postWrapper.value.content?.text || '',
+    created: postWrapper.value.content?.created || 0,
+    modified: postWrapper.value.content?.modified || 0,
+    views: postWrapper.value.content?.views || 0,
+    commentsNum: postWrapper.value.content?.commentsNum || 0,
+    category: postWrapper.value.category,
+    tags: postWrapper.value.tags || [],
+    author: postWrapper.value.author,
+  }
+})
 
 useHead({
   title: post.value ? `${post.value.title} - Typecho Blog` : '文章详情 - Typecho Blog',
@@ -11,13 +29,21 @@ useHead({
   ]
 })
 
-const formatDate = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleDateString('zh-CN', {
+const formatDate = (timestamp?: number) => {
+  if (!timestamp) return ''
+  const date = new Date(timestamp * 1000)
+  if (isNaN(date.getTime())) return ''
+  return date.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   })
 }
+
+const renderedContent = computed(() => {
+  if (!post.value?.text) return ''
+  return render(post.value.text)
+})
 </script>
 
 <template>
@@ -77,7 +103,7 @@ const formatDate = (timestamp: number) => {
       </header>
 
       <!-- Content -->
-      <div class="prose max-w-none" v-html="post.text" />
+      <div class="prose max-w-none dark:prose-invert" v-html="renderedContent" />
 
       <!-- Author -->
       <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">

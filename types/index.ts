@@ -43,6 +43,14 @@ export interface Post {
   tags?: Tag[]
 }
 
+// API 返回的文章包装结构
+export interface PostWrapper {
+  content: Post
+  author: Author
+  category?: Category
+  tags?: Tag[]
+}
+
 export interface Author {
   uid: number
   name: string

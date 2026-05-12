@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
+import type { PostWrapper } from '~/types'
 
-// 加载文章列表
 const { data: postsData, pending } = await usePosts({
   pageNum: 1,
   pageSize: 10,
@@ -9,9 +9,21 @@ const { data: postsData, pending } = await usePosts({
   status: 'publish',
 })
 
-const posts = computed(() => postsData.value?.list || [])
+const posts = computed(() => {
+  const list = postsData.value?.list || []
+  return list.map((item: PostWrapper) => ({
+    cid: item.content?.cid,
+    title: item.content?.title || '',
+    text: item.content?.text || '',
+    created: item.content?.created || 0,
+    category: item.category,
+    tags: item.tags,
+    views: item.content?.views || 0,
+    commentsNum: item.content?.commentsNum || 0,
+    author: item.author,
+  }))
+})
 
-// 动画
 onMounted(() => {
   gsap.from('.post-card', {
     opacity: 0,
