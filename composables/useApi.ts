@@ -23,6 +23,9 @@ export const useApi = <T>(
 
   return useFetch<ApiResponse<T>>(`${apiBase}${url}`, {
     ...options,
+    key: options.key || url,
+    lazy: options.lazy ?? true,
+    dedupe: 'defer',
     headers: {
       'Content-Type': 'application/json',
       ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
@@ -39,15 +42,19 @@ export const useApi = <T>(
     onResponseError({ response }) {
       if (response.status === 401) {
         token.value = null
-        navigateTo('/login')
+        // 只在客户端执行导航
+        if (import.meta.client) {
+          navigateTo('/login')
+        }
       }
     },
   })
 }
 
 // GET 请求
-export const useApiGet = <T>(url: string, params?: Record<string, unknown>) => {
+export const useApiGet = <T>(url: string, params?: Record<string, unknown>, options: UseFetchOptions<T> = {}) => {
   return useApi<T>(url, {
+    ...options,
     method: 'GET',
     params,
   })
@@ -57,7 +64,7 @@ export const useApiGet = <T>(url: string, params?: Record<string, unknown>) => {
 export const useApiPost = <T>(url: string, body?: unknown) => {
   return useApi<T>(url, {
     method: 'POST',
-    body,
+    body: body as any,
   })
 }
 
@@ -65,7 +72,7 @@ export const useApiPost = <T>(url: string, body?: unknown) => {
 export const useApiPut = <T>(url: string, body?: unknown) => {
   return useApi<T>(url, {
     method: 'PUT',
-    body,
+    body: body as any,
   })
 }
 

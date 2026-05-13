@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { gsap } from 'gsap'
 
 const features = [
   {
@@ -25,17 +24,7 @@ const features = [
 ]
 
 onMounted(() => {
-  gsap.from('.feature-card', {
-    opacity: 0,
-    y: 50,
-    duration: 0.6,
-    stagger: 0.15,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '.feature-section',
-      start: 'top 80%',
-    },
-  })
+
 })
 </script>
 

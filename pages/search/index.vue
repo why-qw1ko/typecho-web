@@ -1,55 +1,47 @@
 <script setup lang="ts">
-import type { PostWrapper } from '~/types'
+import type { PostWrapper, PageResult } from '~/types'
 
 const route = useRoute()
 const router = useRouter()
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const searchQuery = ref((route.query.q as string) || '')
-const query = computed(() => route.query.q as string || '')
+const query = computed(() => (route.query.q as string) || '')
 
-const postsData = ref<any>(null)
-const pending = ref(false)
-
-const fetchPosts = async () => {
-  if (!query.value) {
-    postsData.value = null
-    return
-  }
-  pending.value = true
-  try {
-    const result = await usePosts({
-      pageNum: 1,
-      pageSize: 20,
-      keyword: query.value,
-    })
-    postsData.value = result.data.value
-  } finally {
-    pending.value = false
-  }
-}
-
-watch(query, () => {
-  fetchPosts()
-}, { immediate: true })
-
-const posts = computed(() => {
-  const list = postsData.value?.list || []
-  return list.map((item: PostWrapper) => ({
-    cid: item.content?.cid,
-    title: item.content?.title || '',
-    text: item.content?.text || '',
-    created: item.content?.created || 0,
-  }))
+// 使用 useApiGet 获取搜索结果 - params 会自动响应式更新
+const { data: postsData, pending, error } = await useApiGet<PageResult<PostWrapper>>('/contents/page', {
+  pageNum: 1,
+  pageSize: 20,
+  keyword: query,
+  type: 'post',
+  status: 'publish',
 })
 
+// 搜索处理
 const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    router.push(`/search?q=${encodeURIComponent(searchQuery.value)}`)
+  const trimmed = searchQuery.value.trim()
+  if (trimmed) {
+    router.push(`/search?q=${encodeURIComponent(trimmed)}`)
   }
 }
 
+const posts = computed(() => {
+  if (!postsData.value) return []
+  const list = postsData.value?.list || []
+  return list.map((item: PostWrapper) => {
+    const content = item.content || item
+    return {
+      cid: content?.cid,
+      title: content?.title || '',
+      text: content?.text || '',
+      created: content?.created || 0,
+    }
+  })
+})
+
 useHead({
-  title: query.value ? `搜索：${query.value} - Typecho Blog` : '搜索 - Typecho Blog',
+  title: computed(() => query.value ? `${t('searchResults')}: ${query.value} - Typecho Blog` : `${t('search')} - Typecho Blog`),
   meta: [
     { name: 'description', content: '搜索文章内容' }
   ]
@@ -63,21 +55,22 @@ useHead({
       <div class="container mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-4">
           <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            {{ query ? '搜索结果' : '搜索文章' }}
+            {{ query ? t('searchResults') : t('searchArticles') }}
           </span>
         </h1>
-        <p class="text-lg text-slate-600 mb-8">输入关键词搜索你感兴趣的内容</p>
+        <p class="text-lg text-slate-600 mb-8">{{ t('inputSearchKeyword') }}</p>
 
         <div class="max-w-xl mx-auto">
           <form @submit.prevent="handleSearch" class="relative">
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="输入搜索关键词..."
+              :placeholder="t('searchPlaceholder')"
               class="w-full px-6 py-4 pr-14 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-lg"
             >
             <button
               type="submit"
+              @click="handleSearch"
               class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-blue-500 text-white rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,15 +108,15 @@ useHead({
 
       <!-- Empty Search -->
       <div v-else-if="query && !posts.length && !pending" class="text-center py-12">
-        <p class="text-slate-500 dark:text-slate-400">未找到相关文章</p>
+        <p class="text-slate-500 dark:text-slate-400">{{ t('notFoundRelated') }}</p>
         <NuxtLink to="/search" class="text-blue-500 hover:underline mt-4 inline-block">
-          重新搜索
+          {{ t('searchAgain') }}
         </NuxtLink>
       </div>
 
       <!-- Empty State -->
       <div v-else-if="!query" class="text-center py-12">
-        <p class="text-slate-500 dark:text-slate-400">输入关键词开始搜索</p>
+        <p class="text-slate-500 dark:text-slate-400">{{ t('inputSearchKeyword') }}</p>
       </div>
     </div>
   </div>

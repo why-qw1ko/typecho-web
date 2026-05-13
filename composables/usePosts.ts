@@ -1,14 +1,31 @@
 import type { Post, PostWrapper, PageResult, Category, Tag } from '~/types'
+import type { UseFetchOptions } from '#app'
+import type { ComputedRef } from 'vue'
+import { useApi } from './useApi'
 
 // 获取文章列表
-export const usePosts = (params: {
-  pageNum?: number
-  pageSize?: number
-  type?: string
-  status?: string
-  keyword?: string
-}) => {
-  return useApi<PageResult<PostWrapper>>('/contents/page', params)
+export const usePosts = (
+  params:
+    | {
+        pageNum?: number
+        pageSize?: number
+        type?: string
+        status?: string
+        keyword?: string
+      }
+    | ComputedRef<{
+        pageNum?: number
+        pageSize?: number
+        type?: string
+        status?: string
+        keyword?: string
+      }>,
+  options: UseFetchOptions<PageResult<PostWrapper>> = {}
+) => {
+  return useApi<PageResult<PostWrapper>>('/contents/page', {
+    ...options,
+    params: params as any,
+  })
 }
 
 // 获取文章详情

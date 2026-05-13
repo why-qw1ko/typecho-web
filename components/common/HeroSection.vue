@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { gsap } from 'gsap'
 
 defineProps<{
   title: string
@@ -8,12 +7,7 @@ defineProps<{
 }>()
 
 onMounted(() => {
-  gsap.from('.hero-content', {
-    opacity: 0,
-    y: 40,
-    duration: 0.8,
-    ease: 'power3.out',
-  })
+  
 })
 </script>
 
@@ -28,14 +22,14 @@ onMounted(() => {
 
     <div class="container mx-auto px-4 text-center">
       <!-- Title -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mb-6">
+      <h1 class="hero-title text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mb-6">
         <span class="gradient-text">{{ title }}</span>
       </h1>
 
       <!-- Description -->
       <p
         v-if="description"
-        class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8"
+        class="hero-description text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8"
       >
         {{ description }}
       </p>
@@ -50,7 +44,9 @@ onMounted(() => {
       </div>
 
       <!-- Slot -->
-      <slot />
+      <div class="hero-buttons mt-8">
+        <slot />
+      </div>
     </div>
   </section>
 </template>

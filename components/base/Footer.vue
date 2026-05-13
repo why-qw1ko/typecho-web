@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { gsap } from 'gsap'
 
 // 链接数据
 const links = [
@@ -11,13 +10,7 @@ const links = [
 const currentYear = new Date().getFullYear()
 
 onMounted(() => {
-  gsap.from('.footer-content', {
-    opacity: 0,
-    y: 20,
-    duration: 0.6,
-    delay: 0.3,
-    ease: 'power2.out',
-  })
+
 })
 </script>
 

@@ -5,10 +5,10 @@ interface Toast {
   duration: number
 }
 
-const toasts = ref<Toast[]>([])
-let toastId = 0
-
 export const useToast = () => {
+  const toasts = useState<Toast[]>('toasts', () => [])
+  let toastId = 0
+
   const addToast = (message: string, type: Toast['type'] = 'info', duration = 3000) => {
     const id = ++toastId
     toasts.value.push({ id, message, type, duration })

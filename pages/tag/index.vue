@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 // 加载标签列表
 const { data: tags, pending } = await useTags()
 
 useHead({
-  title: '标签 - Typecho Blog',
+  title: computed(() => `${t('hotTags')} - Typecho Blog`),
   meta: [
-    { name: 'description', content: '浏览所有文章标签' }
+    { name: 'description', content: computed(() => t('inputSearchKeyword')) }
   ]
 })
 </script>
@@ -17,10 +20,10 @@ useHead({
       <div class="container mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-4">
           <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            热门标签
+            {{ t('hotTags') }}
           </span>
         </h1>
-        <p class="text-lg text-slate-600">通过标签发现更多相关内容</p>
+        <p class="text-lg text-slate-600">{{ t('inputSearchKeyword') }}</p>
       </div>
     </section>
 

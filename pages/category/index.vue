@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 // 加载分类列表
 const { data: categories, pending } = await useCategories()
 
 useHead({
-  title: '分类 - Typecho Blog',
+  title: computed(() => `${t('categories')} - Typecho Blog`),
   meta: [
-    { name: 'description', content: '浏览所有文章分类' }
+    { name: 'description', content: computed(() => t('latestPostsDesc')) }
   ]
 })
 </script>
@@ -17,10 +20,10 @@ useHead({
       <div class="container mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-4">
           <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            文章分类
+            {{ t('categories') }}
           </span>
         </h1>
-        <p class="text-lg text-slate-600">按类别浏览文章，快速找到感兴趣的内容</p>
+        <p class="text-lg text-slate-600">{{ t('latestPostsDesc') }}</p>
       </div>
     </section>
 
@@ -47,7 +50,7 @@ useHead({
                 {{ category.name }}
               </h3>
               <p class="text-sm text-slate-500 dark:text-slate-400">
-                {{ category.count }} 篇文章
+                {{ category.count }} {{ t('posts') }}
               </p>
             </div>
           </div>

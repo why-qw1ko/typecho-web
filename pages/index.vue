@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 // SEO
 useSeoMeta({
-  title: 'Typecho Blog - 现代化的博客系统',
-  description: '一个基于 Nuxt 4 + Spring Boot 构建的现代化博客系统，支持暗色模式、响应式设计、优雅动画',
+  title: computed(() => `${t('welcome')} - Typecho Blog`),
+  description: computed(() => t('heroDesc')),
   ogTitle: 'Typecho Blog',
-  ogDescription: '现代化的博客系统',
+  ogDescription: computed(() => t('heroDesc')),
 })
 </script>
 
@@ -12,21 +15,21 @@ useSeoMeta({
   <div>
     <!-- Hero Section -->
     <CommonHeroSection
-      title="探索 · 记录 · 分享"
-      description="一个现代化的博客系统，记录技术成长，分享生活点滴"
+      :title="t('heroTitle')"
+      :description="t('heroDesc')"
     >
       <div class="flex flex-wrap justify-center gap-4 mt-8">
         <NuxtLink
           to="/"
-          class="px-6 py-3 bg-white dark:bg-slate-800 text-primary-500 dark:text-primary-400 rounded-xl font-medium shadow-soft hover:shadow-medium transition-all"
+          class="px-8 py-3.5 bg-white dark:bg-slate-800 text-primary-500 dark:text-primary-400 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
         >
-          开始阅读
+          {{ t('startReading') }}
         </NuxtLink>
         <NuxtLink
           to="/about"
-          class="px-6 py-3 border-2 border-white/50 text-white rounded-xl font-medium hover:bg-white/10 transition-all"
+          class="px-8 py-3.5 border-2 border-white text-primary-500 dark:text-primary-400 rounded-xl font-semibold shadow-lg hover:bg-white/10 hover:scale-105 transition-all duration-300"
         >
-          了解更多
+          {{ t('learnMore') }}
         </NuxtLink>
       </div>
     </CommonHeroSection>

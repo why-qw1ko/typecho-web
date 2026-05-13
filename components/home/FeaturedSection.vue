@@ -1,37 +1,41 @@
 <script setup lang="ts">
-import { gsap } from 'gsap'
 import type { PostWrapper } from '~/types'
+import { useI18n } from 'vue-i18n'
 
-const { data: postsData } = await usePosts({
+const { t } = useI18n()
+
+// 获取精选文章
+const { data: postsData, pending, error } = await usePosts({
   pageNum: 1,
   pageSize: 3,
   type: 'post',
   status: 'publish',
+}, {
+  key: 'home-featured-posts',
 })
 
 const featuredPosts = computed(() => {
+  if (!postsData.value) return []
   const list = postsData.value?.list || []
-  return list.slice(0, 3).map((item: PostWrapper) => ({
-    cid: item.content?.cid,
-    title: item.content?.title || '',
-    text: item.content?.text || '',
-    created: item.content?.created || 0,
-    category: item.category,
-    tags: item.tags,
-    views: item.content?.views || 0,
-    commentsNum: item.content?.commentsNum || 0,
-  }))
-})
-
-onMounted(() => {
-  gsap.from('.featured-post', {
-    opacity: 0,
-    y: 30,
-    duration: 0.6,
-    stagger: 0.2,
-    ease: 'power2.out',
+  return list.slice(0, 3).map((item: PostWrapper) => {
+    const content = item.content || item
+    return {
+      cid: content?.cid,
+      title: content?.title || '',
+      text: content?.text || '',
+      created: content?.created || 0,
+      category: item.category,
+      tags: item.tags,
+      views: content?.views || 0,
+      commentsNum: content?.commentsNum || 0,
+    }
   })
 })
+
+// 错误处理
+if (error.value) {
+  console.error('Failed to fetch featured posts:', error.value)
+}
 </script>
 
 <template>
@@ -39,10 +43,10 @@ onMounted(() => {
     <div class="container mx-auto px-4">
       <div class="text-center mb-12">
         <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">
-          <span class="gradient-text">精选推荐</span>
+          <span class="gradient-text">{{ t('featured') }}</span>
         </h2>
         <p class="text-slate-600 dark:text-slate-400">
-          编辑精选的优质内容
+          {{ t('featuredDesc') }}
         </p>
       </div>
 
@@ -51,7 +55,7 @@ onMounted(() => {
           v-for="(post, index) in featuredPosts"
           :key="post.cid"
           :to="`/post/${post.cid}`"
-          class="featured-post group relative overflow-hidden rounded-2xl aspect-[4/5]"
+          class="group relative overflow-hidden rounded-2xl aspect-[4/5]"
         >
           <!-- Background -->
           <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500" />
@@ -61,13 +65,13 @@ onMounted(() => {
             <span
               class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm rounded-full mb-3 w-fit"
             >
-              精选 #{{ index + 1 }}
+              {{ t('featured') }} #{{ index + 1 }}
             </span>
             <h3 class="text-xl font-semibold text-white mb-2 group-hover:text-accent-300 transition-colors">
               {{ post.title }}
             </h3>
             <p class="text-white/80 text-sm line-clamp-2">
-              点击阅读全文 →
+              {{ t('readMore') }} →
             </p>
           </div>
 

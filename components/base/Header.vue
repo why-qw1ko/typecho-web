@@ -10,21 +10,27 @@ const userStore = useUserStore()
 const toast = useToast()
 
 // i18n
-const { locale, locales, setLocale } = useI18n()
+const { t, locale, locales, setLocale } = useI18n()
 const showLangMenu = ref(false)
+
+// 获取当前语言名称
+const currentLocaleName = computed(() => {
+  const current = locales.value.find((l: any) => l.code === locale.value)
+  return current?.name || locale.value
+})
 
 // 移动端菜单状态
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 
-// 导航项
-const navItems = [
-  { label: '首页', to: '/' },
-  { label: '分类', to: '/category' },
-  { label: '标签', to: '/tag' },
-  { label: '搜索', to: '/search' },
-  { label: '关于', to: '/about' },
-]
+// 导航项 - 使用 i18n
+const navItems = computed(() => [
+  { label: t('home'), to: '/' },
+  { label: t('categories'), to: '/category' },
+  { label: t('tags'), to: '/tag' },
+  { label: t('search'), to: '/search' },
+  { label: t('about'), to: '/about' },
+])
 
 // 监听滚动
 onMounted(() => {
@@ -58,16 +64,18 @@ const toggleLang = () => {
   showLangMenu.value = !showLangMenu.value
 }
 
-const changeLocale = (code: string) => {
-  setLocale(code)
+const changeLocale = async (code: string) => {
+  await setLocale(code as 'zh-CN' | 'en-US')
   showLangMenu.value = false
 }
 
-// 获取当前语言名称
-const currentLocaleName = computed(() => {
-  const current = locales.value.find((l: any) => l.code === locale.value)
-  return current?.name || locale.value
-})
+// 退出登录
+const handleLogout = () => {
+  if (confirm(t('logoutConfirm'))) {
+    userStore.logout()
+    toast.success(t('logoutSuccess'))
+  }
+}
 </script>
 
 <template>
@@ -182,17 +190,17 @@ const currentLocaleName = computed(() => {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
-            登录
+            {{ t('login') }}
           </NuxtLink>
           <button
             v-else
-            @click="() => { userStore.logout(); toast.success('已退出登录'); }"
+            @click="handleLogout"
             class="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-medium transition-colors"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
-            退出
+            {{ t('logout') }}
           </button>
 
           <!-- Mobile Menu Toggle -->

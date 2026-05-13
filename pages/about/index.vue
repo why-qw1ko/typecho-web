@@ -1,10 +1,5 @@
 <script setup lang="ts">
-useHead({
-  title: '关于 - Typecho Blog',
-  meta: [
-    { name: 'description', content: '了解更多关于这个博客的信息' }
-  ]
-})
+const { t } = useI18n()
 
 const skills = [
   { name: 'Vue.js', level: 90 },
@@ -19,6 +14,13 @@ const timeline = [
   { year: '2023', title: '开始学习', desc: '深入学习前端和后端技术' },
   { year: '2022', title: '初次接触', desc: '第一次接触 Web 开发' },
 ]
+
+useHead({
+  title: computed(() => `${t('about')} - Typecho Blog`),
+  meta: [
+    { name: 'description', content: computed(() => t('heroDesc')) }
+  ]
+})
 </script>
 
 <template>
@@ -28,10 +30,10 @@ const timeline = [
       <div class="container mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-4">
           <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            关于我
+            {{ t('about') }}
           </span>
         </h1>
-        <p class="text-lg text-slate-600">一个热爱技术的开发者，记录学习和成长的点滴</p>
+        <p class="text-lg text-slate-600">{{ t('heroDesc') }}</p>
       </div>
     </section>
 
@@ -40,11 +42,11 @@ const timeline = [
         <!-- Introduction -->
         <section class="mb-16">
           <h2 class="text-2xl font-bold mb-6 text-blue-600">
-            个人简介
+            {{ t('learnMore') }}
           </h2>
           <div class="text-slate-600 dark:text-slate-400 leading-relaxed">
             <p>
-              你好！我是一个热爱技术的开发者，喜欢探索新技术，并将其应用到实际项目中。
+              {{ t('heroDesc') }}
               这个博客是我记录学习过程和技术分享的地方。
             </p>
             <p class="mt-4">
