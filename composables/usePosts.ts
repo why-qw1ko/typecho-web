@@ -49,13 +49,13 @@ export const usePostsByTag = (mid: number) => {
 }
 
 // 获取所有分类
-export const useCategories = () => {
-  return useApi<Category[]>('/metas/categories')
+export const useCategories = <T = Category[]>() => {
+  return useApi<T>('/metas/categories')
 }
 
 // 获取所有标签
-export const useTags = () => {
-  return useApi<Tag[]>('/metas/tags')
+export const useTags = <T = Tag[]>() => {
+  return useApi<T>('/metas/tags')
 }
 
 // 获取网站统计

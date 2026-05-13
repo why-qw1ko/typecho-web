@@ -13,12 +13,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
   ],
 
-  site: {
-    url: 'https://your-domain.com',
-    name: 'Typecho Blog',
-    description: '一个现代化的博客系统',
-  },
-
   i18n: {
     locales: [
       { code: 'zh-CN', name: '简体中文', file: 'zh-CN.json' },

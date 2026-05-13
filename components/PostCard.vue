@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Post } from '~/types'
+import { decodeHtml } from '~/composables/useHtml'
 
 const props = defineProps<{
   post: Post
@@ -59,7 +60,7 @@ const excerpt = computed(() => {
       <!-- Title -->
       <h2 class="font-display font-bold text-xl mb-2 group-hover:text-primary-500 transition-colors line-clamp-1">
         <NuxtLink :to="`/post/${post.cid}`" class="block">
-          {{ post.title }}
+          {{ decodeHtml(post.title || '') }}
         </NuxtLink>
       </h2>
 

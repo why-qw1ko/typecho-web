@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import type { PostWrapper } from '~/types'
+import { decodeHtml } from '~/composables/useHtml'
 import { useI18n } from 'vue-i18n'
+
+interface FeaturedPost {
+  cid: number
+  title: string
+  text: string
+  created: number
+  category?: PostWrapper['category']
+  tags?: PostWrapper['tags']
+  views: number
+  commentsNum: number
+}
 
 const { t } = useI18n()
 
@@ -14,7 +26,7 @@ const { data: postsData, pending, error } = await usePosts({
   key: 'home-featured-posts',
 })
 
-const featuredPosts = computed(() => {
+const featuredPosts = computed<FeaturedPost[]>(() => {
   if (!postsData.value) return []
   const list = postsData.value?.list || []
   return list.slice(0, 3).map((item: PostWrapper) => {
@@ -68,7 +80,7 @@ if (error.value) {
               {{ t('featured') }} #{{ index + 1 }}
             </span>
             <h3 class="text-xl font-semibold text-white mb-2 group-hover:text-accent-300 transition-colors">
-              {{ post.title }}
+              {{ decodeHtml(post.title) }}
             </h3>
             <p class="text-white/80 text-sm line-clamp-2">
               {{ t('readMore') }} →

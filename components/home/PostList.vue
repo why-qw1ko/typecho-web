@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PostWrapper } from '~/types'
+import type { PostWrapper, Post } from '~/types'
 import Pagination from '~/components/common/Pagination.vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -26,19 +26,15 @@ const { data: postsData, pending, error, refresh } = await usePosts(postsParams,
 const posts = computed(() => {
   if (!postsData.value) return []
   const list = postsData.value?.list || []
-  return list.map((item: PostWrapper, index: number) => {
+  return list.map((item: PostWrapper): Post => {
     const content = item.content || item
     return {
-      id: content?.cid || `post-${index}`,
-      cid: content?.cid,
-      title: content?.title || '无标题',
-      text: content?.text || '',
-      created: content?.created || 0,
-      category: item.category,
-      tags: item.tags,
-      views: content?.views || 0,
-      commentsNum: content?.commentsNum || 0,
-      author: item.author,
+      ...content,
+      slug: content.slug || '',
+      modified: content.modified || content.created,
+      type: content.type || 'post',
+      status: content.status || 'publish',
+      authorId: content.authorId || (item.author?.uid || 0),
     }
   })
 })
@@ -86,7 +82,7 @@ const handlePageChange = async (page: number) => {
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <PostCard
         v-for="post in posts"
-        :key="post.id"
+        :key="post.cid"
         :post="post"
         class="post-card"
       />

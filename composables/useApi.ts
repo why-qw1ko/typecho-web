@@ -21,7 +21,7 @@ export const useApi = <T>(
   const apiBase = getApiBase()
   const token = useCookie('token')
 
-  return useFetch<ApiResponse<T>>(`${apiBase}${url}`, {
+  return useFetch(`${apiBase}${url}`, {
     ...options,
     key: options.key || url,
     lazy: options.lazy ?? true,
@@ -31,7 +31,7 @@ export const useApi = <T>(
       ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
       ...options.headers,
     },
-    transform: (response: ApiResponse<T>) => {
+    transform: (response: ApiResponse<T>): T => {
       if (response.code !== 200) {
         const error = new Error(response.message || 'API Error')
         ;(error as any).code = response.code
@@ -48,7 +48,7 @@ export const useApi = <T>(
         }
       }
     },
-  })
+  } as UseFetchOptions<T>)
 }
 
 // GET 请求

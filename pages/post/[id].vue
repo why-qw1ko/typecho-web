@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PostWrapper } from '~/types'
+import { decodeHtml } from '~/composables/useHtml'
 
 const route = useRoute()
 const cid = computed(() => route.params.id as string)
@@ -23,7 +24,7 @@ const post = computed(() => {
 })
 
 useHead({
-  title: post.value ? `${post.value.title} - Typecho Blog` : '文章详情 - Typecho Blog',
+  title: post.value ? `${decodeHtml(post.value.title)} - Typecho Blog` : '文章详情 - Typecho Blog',
   meta: [
     { name: 'description', content: post.value?.text?.replace(/<[^>]*>/g, '').slice(0, 160) || '' }
   ]
@@ -77,7 +78,7 @@ const renderedContent = computed(() => {
 
         <!-- Title -->
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-          {{ post.title }}
+          {{ decodeHtml(post.title) }}
         </h1>
 
         <!-- Meta -->

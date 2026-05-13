@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Category, Tag } from '~/types'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -14,9 +15,6 @@ if (tagsError.value) {
   console.error('Failed to fetch tags:', tagsError.value)
 }
 
-// GSAP 动画
-onMounted(() => {
-})
 </script>
 
 <template>

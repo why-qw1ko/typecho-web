@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PostWrapper, PageResult } from '~/types'
+import { decodeHtml } from '~/composables/useHtml'
 
 const route = useRoute()
 const router = useRouter()
@@ -97,7 +98,7 @@ useHead({
         >
           <h3 class="font-semibold text-xl mb-2 text-blue-600 dark:text-blue-400">
             <NuxtLink :to="`/post/${post.cid}`" class="hover:underline">
-              {{ post.title }}
+              {{ decodeHtml(post.title) }}
             </NuxtLink>
           </h3>
           <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-3">
