@@ -1,42 +1,75 @@
 <script setup lang="ts">
+import { gsap } from 'gsap'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
-const features = [
+const sectionRef = ref<HTMLElement | null>(null)
+
+const features = computed(() => [
   {
     icon: 'rocket',
-    title: '极速体验',
-    description: '采用 Nuxt 4 构建，支持 SSR 和静态生成，首屏加载极快',
+    title: t('fastExperience'),
+    description: t('fastExperienceDesc'),
+    color: 'from-primary-500 to-primary-600',
   },
   {
     icon: 'moon',
-    title: '暗色模式',
-    description: '自动跟随系统，一键切换，保护你的眼睛',
+    title: t('darkModeFeature'),
+    description: t('darkModeDesc'),
+    color: 'from-accent-500 to-accent-600',
   },
   {
     icon: 'mobile',
-    title: '响应式设计',
-    description: '完美适配手机、平板、桌面，随时随地阅读',
+    title: t('responsiveDesign'),
+    description: t('responsiveDesc'),
+    color: 'from-emerald-500 to-emerald-600',
   },
   {
     icon: 'code',
-    title: '代码高亮',
-    description: '支持多种编程语言语法高亮，阅读代码更轻松',
+    title: t('codeHighlight'),
+    description: t('codeHighlightDesc'),
+    color: 'from-warm-500 to-warm-600',
   },
-]
+])
 
+// 滚动入场动画
 onMounted(() => {
+  if (!sectionRef.value) return
+  const cards = sectionRef.value.querySelectorAll('.feature-card')
 
+  gsap.set(cards, { opacity: 0, y: 40 })
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.12,
+            ease: 'power2.out',
+          })
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.2 }
+  )
+
+  observer.observe(sectionRef.value)
 })
 </script>
 
 <template>
-  <section class="feature-section py-20 bg-slate-50 dark:bg-slate-900/50">
+  <section ref="sectionRef" class="feature-section py-20 bg-slate-50 dark:bg-slate-900/50">
     <div class="container mx-auto px-4">
       <div class="text-center mb-12">
         <h2 class="text-3xl md:text-4xl font-display font-bold mb-4">
-          <span class="gradient-text">为什么选择我们</span>
+          <span class="gradient-text">{{ t('whyChooseUs') }}</span>
         </h2>
         <p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-          现代化的博客体验，专为内容创作者打造
+          {{ t('whyChooseUsDesc') }}
         </p>
       </div>
 
@@ -44,9 +77,12 @@ onMounted(() => {
         <div
           v-for="feature in features"
           :key="feature.title"
-          class="feature-card p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-soft hover:shadow-medium transition-all group"
+          class="feature-card p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-card hover:shadow-elevated transition-all duration-500 group hover:-translate-y-1"
         >
-          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+          <div
+            class="w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+            :class="feature.color"
+          >
             <!-- Rocket -->
             <svg v-if="feature.icon === 'rocket'" class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.38 5.84h4.8m2.58-5.84a14.98 14.98 0 00-6.16 12.12M3.34 9.47a6 6 0 005.84 7.38V12m-.002-2.58A14.98 14.98 0 019.631 8.41" />
@@ -65,8 +101,8 @@ onMounted(() => {
             </svg>
           </div>
           <h3 class="font-semibold text-lg mb-2">{{ feature.title }}</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm">
-   {{ feature.description }}
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+            {{ feature.description }}
           </p>
         </div>
       </div>

@@ -103,7 +103,7 @@ const handleLogout = () => {
         </NuxtLink>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-8">
+        <nav class="hidden md:flex items-center gap-8 group">
           <NuxtLink
             v-for="item in navItems"
             :key="item.to"

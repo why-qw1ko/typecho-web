@@ -37,6 +37,24 @@ export default {
           800: '#86198f',
           900: '#701a75',
         },
+        warm: {
+          50: '#fffbeb',
+          100: '#fef3c7',
+          200: '#fde68a',
+          300: '#fcd34d',
+          400: '#fbbf24',
+          500: '#f59e0b',
+          600: '#d97706',
+        },
+        emerald: {
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          200: '#a7f3d0',
+          300: '#6ee7b7',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669',
+        },
         surface: {
           50: '#f8fafc',
           100: '#f1f5f9',
@@ -61,7 +79,10 @@ export default {
       boxShadow: {
         soft: '0 4px 20px -4px rgb(0 0 0 / 0.08)',
         medium: '0 8px 30px -8px rgb(0 0 0 / 0.12)',
+        card: '0 2px 12px -2px rgb(0 0 0 / 0.06)',
+        elevated: '0 12px 40px -8px rgb(0 0 0 / 0.15)',
         glow: '0 0 40px rgb(59 130 246 / 0.15)',
+        'glow-accent': '0 0 40px rgb(217 70 239 / 0.15)',
       },
       transitionDuration: {
         fast: '150ms',

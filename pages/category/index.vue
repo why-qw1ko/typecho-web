@@ -16,21 +16,15 @@ useHead({
 <template>
   <div>
     <!-- Hero Section -->
-    <section class="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-4">
-          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            {{ t('categories') }}
-          </span>
-        </h1>
-        <p class="text-lg text-slate-600">{{ t('latestPostsDesc') }}</p>
-      </div>
-    </section>
+    <CommonPageHero
+      :title="t('categories')"
+      :description="t('latestPostsDesc')"
+    />
 
     <div class="container mx-auto px-4 py-12">
       <!-- Loading -->
       <div v-if="pending" class="flex justify-center py-12">
-        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
       </div>
 
       <!-- Categories Grid -->
@@ -39,14 +33,16 @@ useHead({
           v-for="category in categories"
           :key="category.mid"
           :to="`/category/${category.mid}`"
-          class="group p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-md hover:shadow-lg transition-all"
+          class="group p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-card hover:shadow-elevated transition-all duration-500 relative overflow-hidden hover:-translate-y-1"
         >
+          <!-- 左侧装饰条 -->
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-500 to-accent-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform">
+            <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 group-hover:shadow-glow transition-all duration-300">
               {{ category.name.charAt(0) }}
             </div>
             <div>
-              <h3 class="font-semibold text-lg group-hover:text-blue-500 transition-colors">
+              <h3 class="font-semibold text-lg group-hover:text-primary-500 transition-colors">
                 {{ category.name }}
               </h3>
               <p class="text-sm text-slate-500 dark:text-slate-400">

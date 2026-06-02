@@ -5,6 +5,13 @@ const { t } = useI18n()
 // 加载标签列表
 const { data: tags, pending } = await useTags()
 
+// 根据文章数量计算标签大小
+const getTagSize = (count: number) => {
+  if (count >= 10) return 'text-lg px-6 py-3'
+  if (count >= 5) return 'text-base px-5 py-2.5'
+  return 'text-sm px-4 py-2'
+}
+
 useHead({
   title: computed(() => `${t('hotTags')} - Typecho Blog`),
   meta: [
@@ -16,35 +23,30 @@ useHead({
 <template>
   <div>
     <!-- Hero Section -->
-    <section class="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-4">
-          <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-            {{ t('hotTags') }}
-          </span>
-        </h1>
-        <p class="text-lg text-slate-600">{{ t('inputSearchKeyword') }}</p>
-      </div>
-    </section>
+    <CommonPageHero
+      :title="t('hotTags')"
+      :description="t('inputSearchKeyword')"
+    />
 
     <div class="container mx-auto px-4 py-12">
       <!-- Loading -->
       <div v-if="pending" class="flex justify-center py-12">
-        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
       </div>
 
       <!-- Tags Cloud -->
-      <div v-else class="flex flex-wrap justify-center gap-4">
+      <div v-else class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
         <NuxtLink
           v-for="tag in tags"
           :key="tag.mid"
           :to="`/tag/${tag.mid}`"
-          class="group px-6 py-3 bg-white dark:bg-slate-900 rounded-xl shadow-md hover:shadow-lg transition-all"
+          class="group bg-white dark:bg-slate-900 rounded-xl shadow-card hover:shadow-elevated transition-all duration-300 font-medium hover:-translate-y-0.5 hover:bg-primary-500 hover:text-white"
+          :class="getTagSize(tag.count)"
         >
-          <span class="font-medium group-hover:text-blue-500 transition-colors">
+          <span class="group-hover:text-white transition-colors">
             #{{ tag.name }}
           </span>
-          <span class="ml-2 text-sm text-slate-500 dark:text-slate-400">
+          <span class="ml-2 text-slate-400 dark:text-slate-500 text-xs group-hover:text-white/70 transition-colors">
             ({{ tag.count }})
           </span>
         </NuxtLink>

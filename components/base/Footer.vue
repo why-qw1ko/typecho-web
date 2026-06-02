@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const { t } = useI18n()
 
 // 链接数据
 const links = [
@@ -9,9 +10,12 @@ const links = [
 
 const currentYear = new Date().getFullYear()
 
-onMounted(() => {
-
-})
+const quickLinks = computed(() => [
+  { name: t('home'), to: '/' },
+  { name: t('categories'), to: '/category' },
+  { name: t('tags'), to: '/tag' },
+  { name: t('about'), to: '/about' },
+])
 </script>
 
 <template>
@@ -27,8 +31,7 @@ onMounted(() => {
             <span class="font-display font-semibold text-xl">Typecho</span>
           </div>
           <p class="text-slate-600 dark:text-slate-400 leading-relaxed max-w-md">
-            一个现代化的博客系统，采用 Nuxt 4 + Spring Boot 构建，
-            支持暗色模式、响应式设计、优雅的动画效果。
+            {{ t('heroDesc') }}
           </p>
           <!-- Social Links -->
           <div class="flex gap-4 mt-6">
@@ -38,7 +41,7 @@ onMounted(() => {
               :href="link.url"
               target="_blank"
               rel="noopener"
-              class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-all duration-300 hover:scale-110"
+              class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-primary-500 hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-glow"
               :aria-label="link.name"
             >
               <!-- GitHub -->
@@ -59,26 +62,15 @@ onMounted(() => {
 
         <!-- Quick Links -->
         <div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">快速链接</h3>
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">{{ t('quickLinks') }}</h3>
           <ul class="space-y-3">
-            <li>
-              <NuxtLink to="/" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-                首页
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/category" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-                分类
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/tag" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-                标签
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/about" class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors">
-                关于
+            <li v-for="link in quickLinks" :key="link.to">
+              <NuxtLink
+                :to="link.to"
+                class="text-slate-600 dark:text-slate-400 hover:text-primary-500 transition-colors inline-flex items-center gap-1 group"
+              >
+                <span class="w-0 group-hover:w-2 h-0.5 bg-primary-500 rounded-full transition-all duration-300" />
+                {{ link.name }}
               </NuxtLink>
             </li>
           </ul>
@@ -86,16 +78,16 @@ onMounted(() => {
 
         <!-- Contact -->
         <div>
-          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">联系方式</h3>
+          <h3 class="font-semibold text-slate-900 dark:text-white mb-4">{{ t('contact') }}</h3>
           <ul class="space-y-3">
             <li class="text-slate-600 dark:text-slate-400">
-              <span class="font-medium">邮箱：</span>
+              <span class="font-medium">{{ t('email') }}：</span>
               <a href="mailto:hello@example.com" class="hover:text-primary-500 transition-colors">
                 hello@example.com
               </a>
             </li>
             <li class="text-slate-600 dark:text-slate-400">
-              <span class="font-medium">地址：</span>
+              <span class="font-medium">{{ t('address') }}：</span>
               中国 · 北京
             </li>
           </ul>
