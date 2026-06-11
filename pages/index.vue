@@ -37,16 +37,26 @@ useSeoMeta({
     <!-- Stats Section -->
     <HomeStatsSection />
 
-    <!-- Featured Section -->
-    <HomeFeaturedSection />
+    <!-- Main Content: Sidebar + Posts -->
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <!-- Left Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-24">
+              <HomeSidebarSection />
+            </div>
+          </div>
 
-    <!-- Post List -->
-    <HomePostList />
+          <!-- Right Content: Post List -->
+          <div class="lg:col-span-3">
+            <HomePostList />
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Features -->
     <HomeFeatureSection />
-
-    <!-- Categories & Tags -->
-    <HomeCategoryTagSection />
   </div>
 </template>
